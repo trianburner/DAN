@@ -28,6 +28,7 @@ class DANPacket:
     TYPEBITS = 2
     PADDING = 8 - TYPEBITS
     ENDIANNESS = 'big'
+    MAXLENGTH = 200
 
     def __init__(self):
         pass
@@ -85,6 +86,11 @@ class BroadcastPacket(DANPacket):
         content_start = cls.INFOBYTES + cls.SOURCEBYTES + cls.IDBYTES
         content = content[content_start:].decode(cls.STRENCODING)
         return BroadcastPacket(source, id, content)
+    
+    def same_header(self, rhs):
+        if isinstance(rhs, BroadcastPacket):
+            return self.source == rhs.source and self.id == rhs.id
+        return False
     
     def __repr__(self):
         return f"source: {self.source} id: {self.id} content: {self.content}"
