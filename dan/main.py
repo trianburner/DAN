@@ -12,7 +12,7 @@ PASSWORD = "123456789"
 rp2.country('US')
 
 # Disable WiFi power-saving
-ap.config(pm = 0xa11140)
+# ap.config(pm = 0xa11140)
 
 # Configure AP settings for softAP network
 ap = network.WLAN(network.AP_IF)
@@ -28,7 +28,7 @@ ap.ifconfig(('192.168.1.2', '255.255.255.0', '192.168.1.1', '8.8.8.8'))
 
 print("--Access point active")
 print("--SSID: " + SSID)
-print(ap.ifconfig() + "\n")
+print(ap.ifconfig())
 
 # TODO Move these to files
 BASE_TEMPLATE = '''<!doctype html>
