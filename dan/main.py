@@ -1,6 +1,7 @@
 from microdot import Microdot, Response, redirect
 from microdot.session import Session, with_session
 import network
+from webserver import webserver
 
 # TODO recall settings from file on boot
 
@@ -30,65 +31,8 @@ print("--Access point active")
 print("--SSID: " + SSID)
 print(ap.ifconfig())
 
-# TODO Move these to files
-BASE_TEMPLATE = '''<!doctype html>
-<html>
-  <head>
-    <title>DAN</title>
-    <meta charset="UTF-8">
-  </head>
-  <body>
-    <h1>Login to DAN</h1>
-    {content}
-  </body>
-</html>'''
 
-LOGGED_OUT = '''<p>You are not logged in.</p>
-<form method="POST">
-  <p>
-    Username:
-    <input name="username" autofocus />
-  </p>
-  <input type="submit" value="Submit" />
-</form>'''
-
-LOGGED_IN = '''<p>Hello <b>{username}</b>!</p>
-<form method="POST" action="/logout">
-  <input type="submit" value="Logout" />
-</form>'''
-
-# Create web server
-app = Microdot()
-Session(app, secret_key='top-secret')
-Response.default_content_type = 'text/html'
-
-# Define response to GET at root directory
-@app.get('/')
-@app.post('/')
-@with_session
-async def index(req, session):
-    username = session.get('username')
-    # Store session username after login
-    if req.method == 'POST':
-        username = req.form.get('username')
-        session['username'] = username
-        session.save()
-        return redirect('/')
-    # If logged out, send logged out page
-    if username is None:
-        return BASE_TEMPLATE.format(content=LOGGED_OUT)
-    # If logged in, send logged in page with username
-    else:
-        return BASE_TEMPLATE.format(content=LOGGED_IN.format(
-            username=username))
-
-# Handle logout button press
-@app.post('/logout')
-@with_session
-async def logout(req, session):
-    session.delete()
-    return redirect('/')
 
 # Start web server at port 80
 if __name__ == '__main__':
-    app.run(port = 80)
+    webserver.start_server()
