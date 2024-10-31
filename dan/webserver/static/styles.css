@@ -1,0 +1,60 @@
+body { 
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 1rem; 
+    font-family: sans-serif;
+}
+
+#messages { 
+    height: 400px; 
+    overflow-y: auto; 
+    border: 1px solid #ccc; 
+    margin-bottom: 1rem; 
+    padding: 1rem;
+}
+
+#message-input {
+    width: 80%;
+    padding: 0.5rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.message-user {
+    font-weight: bold;
+    color: #007bff;
+}
+
+.message-system {
+    color: #666;
+    font-style: italic;
+}
+
+.hidden {
+    display: none;
+}
