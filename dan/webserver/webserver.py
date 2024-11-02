@@ -36,11 +36,12 @@ async def chat(request, ws):
                 'type': 'system',
                 'text': f'{username} has joined the chat'
             }
-            messages.append(system_message)
             
             # send message history to newly connected
             for message in messages[-10:]:
                 await ws.send(json.dumps(message))
+            
+            messages.append(system_message)
             
             # send joined message to every connected client
             await _send_to_all_clients(system_message)
