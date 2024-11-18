@@ -5,10 +5,12 @@ import asyncio
 
 
 app = Microdot()
-
+MAX_PINNED_MESSAGES = 10
+MAX_MESSAGE_HISTORY = 30
 # store messages and current clients
 messages = []
-clients = set()
+pinned_messages = []
+client_usernames = {}
 
 @app.route('/')
 def index(request):
@@ -22,14 +24,13 @@ def static(request, path):
 @with_websocket
 async def chat(request, ws):
     # add new client to set
-    clients.add(ws)
     username = None
-
     try:
         # wait for initial join message with username
         data = json.loads(await ws.receive())
         if data['type'] == 'join':
             username = data['username']
+            client_usernames[ws] = username
             
             # system message that user has joined
             system_message = {
@@ -38,13 +39,21 @@ async def chat(request, ws):
             }
             
             # send message history to newly connected
-            for message in messages[-10:]:
+            for message in messages:
                 await ws.send(json.dumps(message))
+                
+            #users that just connected will get a copy of currently pinned messages
+            for pinned_message in pinned_messages:
+                await ws.send(json.dumps(pinned_message))
             
-            messages.append(system_message)
+            __message_append(system_message)
             
             # send joined message to every connected client
             await _send_to_all_clients(system_message)
+
+
+            #updates all users of who's currently online
+            await _send_user_list_to_all_clients()
 
         while True:
             data = json.loads(await ws.receive())
@@ -57,10 +66,34 @@ async def chat(request, ws):
                 }
                 
                 # store message
-                messages.append(message)
-                if len(messages) > 20:  # keep only last 20 messages
-                    messages.pop(0)
+                __message_append(message)
+                
                 await _send_to_all_clients(message)
+            
+            elif data['type'] == 'pin_message':
+                pinned_message = {
+                    'type': 'pinned_message',
+                    'username': data['username'],
+                    'text': data['text']
+                }
+                if pinned_messages not in pinned_messages:
+                    __pinned_message_append(pinned_message)
+                    # sends pinned messages to every user
+                    await _send_to_all_clients(pinned_message)
+            
+            elif data['type'] == 'unpin_message':
+                remove_text = data['text']
+                try:
+                    pinned_messages.remove(remove_text)
+                    # create unpinned message object
+                    unpin_message = {
+                        'type': 'unpin_message',
+                        'text': remove_text
+                    }
+                    #updates all users of what messages were pinned
+                    await _send_to_all_clients(unpin_message)
+                except ValueError:
+                    print("Pinned message not found, ignore")
    
     # websocket is closed/error, prompt user leaving, and remove from client set
     except Exception:
@@ -69,19 +102,48 @@ async def chat(request, ws):
                 'type': 'system',
                 'text': f'{username} has left the chat'
             }
-            messages.append(leave_message)
+            __message_append(leave_message)
             # send leave message to remaining clients
             await _send_to_all_clients(leave_message)
-        clients.remove(ws)
+        
+        
+        #removes entry of user when they disconnect
+        if ws in client_usernames:
+            del client_usernames[ws]
+        
+        #updates all users of whose currently online after a user leaves
+        await _send_user_list_to_all_clients()
 
 # helper function for sending messages to all connected clients
 async def _send_to_all_clients(msg):
-  for client in clients:
+  json_msg = json.dumps(msg)
+  for client in client_usernames:
     try:
-      await client.send(json.dumps(msg))
+      await client.send(json_msg)
     except Exception:
-      clients.remove(client)
-  
+      del client_usernames[client]
+
+#helper function for sending list of currently connected users
+async def _send_user_list_to_all_clients():
+    user_list = list(client_usernames.values())
+
+    user_list_message = {
+        'type': 'user_list',
+        'users': user_list
+    }
+
+    await _send_to_all_clients(user_list_message)
+
+def __message_append(msg):
+    messages.append(msg)
+    if len(messages) > MAX_MESSAGE_HISTORY:
+        messages.pop(0)
+
+def __pinned_message_append(msg):
+    pinned_messages.append(msg)
+    if len(pinned_messages) > MAX_PINNED_MESSAGES:
+        pinned_messages.pop(0)
+
 def start_server():
     try:
         app.run(host='0.0.0.0', port=80)

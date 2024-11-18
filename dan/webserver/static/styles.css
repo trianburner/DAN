@@ -1,60 +1,103 @@
-body { 
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 1rem; 
-    font-family: sans-serif;
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: sans-serif;
 }
 
-#messages { 
-    height: 400px; 
-    overflow-y: auto; 
-    border: 1px solid #ccc; 
-    margin-bottom: 1rem; 
-    padding: 1rem;
+#messages {
+  height: 400px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  width: 100%;
 }
 
 #message-input {
-    width: 80%;
-    padding: 0.5rem;
+  width: 80%;
+  padding: 0.5rem;
 }
 
+/**/
+#chat-panel {
+  display: flex;
+}
+#message-panel {
+  flex-grow: 1;
+}
+
+#user-list-container {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  height: auto;
+}
+#user-list-header {
+  font-size: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 20px;
+}
+#user-list {
+  height: 90px;
+  list-style: none;
+  padding-left: 0px;
+}
+
+#pinned-messages {
+  padding-left: 0px;
+  border: 1px solid #ccc;
+  height: 280px;
+  width: 180px;
+}
+
+#pinned-list-header {
+  margin-bottom: 0px;
+}
+/**/
 button {
-    padding: 0.5rem 1rem;
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 .login-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-box {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    text-align: center;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .message-user {
-    font-weight: bold;
-    color: #007bff;
+  font-weight: bold;
+  color: #007bff;
 }
 
 .message-system {
-    color: #666;
-    font-style: italic;
+  color: #666;
+  font-style: italic;
 }
 
+.message-timestamp {
+  font-size: 0.8em;
+  color: gray;
+  margin-left: 5px;
+}
 .hidden {
-    display: none;
+  display: none;
 }
