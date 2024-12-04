@@ -1,9 +1,6 @@
-from microdot import Microdot, Response, redirect
-from microdot.session import Session, with_session
 import network
 from webserver import webserver
 from dan_backend import initialize_backend
-from sx1262 import SX1262
 
 initialize_backend()
 

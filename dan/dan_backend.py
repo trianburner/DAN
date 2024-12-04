@@ -1,5 +1,4 @@
-from sx1262 import *
-# from _sx126x import *
+from sx1262 import SX1262
 from DANPacket import *
 
 
