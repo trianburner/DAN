@@ -1,3 +1,4 @@
+//chat.js
 const messagesDiv = document.getElementById("messages");
 const messageInput = document.getElementById("message-input");
 const statusDiv = document.getElementById("status");
@@ -7,6 +8,15 @@ const usernameInput = document.getElementById("username-input");
 const pinnedMessagesContainer = document.getElementById("pinned-messages");
 let ws;
 let username = "";
+
+// Add light mode class
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('light-mode');
+
+  // Dark mode button
+  const themeBtn = document.getElementById('toggle-theme');
+  themeBtn.textContent = 'Dark Mode';
+});
 
 function setUsername() {
   const newUsername = usernameInput.value.trim();
@@ -32,10 +42,10 @@ function connect() {
     statusDiv.style.color = "green";
     // Send username to server
     ws.send(
-      JSON.stringify({
-        type: "join",
-        username: username,
-      })
+        JSON.stringify({
+          type: "join",
+          username: username,
+        })
     );
   };
 
@@ -74,15 +84,12 @@ function connect() {
       timestamp.className = "message-time";
       timestamp.textContent = `[${currentTime}]`;
 
-      //Format of Chat Message
-      //[10:56:03 PM] A: Some Text
       messageElement.appendChild(timestamp);
       messageElement.appendChild(document.createTextNode(" "));
       messageElement.appendChild(userSpan);
       messageElement.appendChild(document.createTextNode(message.text));
       messageElement.classList.add("chat-message");
 
-      //right clicking pins message
       messageElement.addEventListener("contextmenu", function (e) {
         e.preventDefault();
         pinMessage(message.username, message.text);
@@ -113,7 +120,8 @@ function connect() {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   };
 }
-//right clicking pinned message, unpins them
+
+// Right-clicking on pinned message to unpin them
 pinnedMessagesContainer.addEventListener("contextmenu", function (e) {
   e.preventDefault();
   const targetMessage = e.target;
@@ -128,12 +136,12 @@ function sendMessage() {
   if (text && ws.readyState === WebSocket.OPEN) {
     const currentTime = new Date().toLocaleTimeString();
     ws.send(
-      JSON.stringify({
-        type: "message",
-        text: text,
-        username: username,
-        timestamp: currentTime,
-      })
+        JSON.stringify({
+          type: "message",
+          text: text,
+          username: username,
+          timestamp: currentTime,
+        })
     );
     messageInput.value = "";
   }
