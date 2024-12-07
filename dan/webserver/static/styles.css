@@ -1,8 +1,11 @@
+
 body {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
   font-family: sans-serif;
+  background-color: #fafafa;
+  color: #4b4b4c;
 }
 
 #messages {
@@ -19,10 +22,10 @@ body {
   padding: 0.5rem;
 }
 
-/**/
 #chat-panel {
   display: flex;
 }
+
 #message-panel {
   flex-grow: 1;
 }
@@ -33,12 +36,14 @@ body {
   width: 200px;
   height: auto;
 }
+
 #user-list-header {
   font-size: 20px;
   margin-top: 0px;
   margin-bottom: 0px;
   margin-right: 20px;
 }
+
 #user-list {
   height: 90px;
   list-style: none;
@@ -55,14 +60,21 @@ body {
 #pinned-list-header {
   margin-bottom: 0px;
 }
-/**/
+
+/* Button Style */
 button {
   padding: 0.5rem 1rem;
-  background: #007bff;
-  color: white;
+  background: #4f6d75;
+  color: #fafafa;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
+
+button:hover {
+  background: #9394a5;
+}
+
 
 .login-screen {
   position: fixed;
@@ -98,6 +110,39 @@ button {
   color: gray;
   margin-left: 5px;
 }
+
 .hidden {
   display: none;
 }
+
+/* Style for Settings Button*/
+.settings-button {
+  padding: 0.5rem 1rem;
+  background: #e4e5f1;
+  color: #4b4b4c;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  position: relative;
+  top: -12px;
+}
+
+.settings-button:hover {
+  background: #9394a5;
+  color: #fafafa;
+}
+
+/* Footer Styling */
+footer {
+  margin-top: auto;
+  text-align: center;  /* Center-align footer text */
+  padding: 1rem;        /* Add space inside the footer */
+  background: var(--bckgrndMenu);  /* Use background from the theme */
+  color: var(--txtColor);    /* Text color from the theme */
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+
+

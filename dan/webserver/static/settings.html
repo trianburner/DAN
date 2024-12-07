@@ -1,0 +1,69 @@
+<!-- settings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings Page</title>
+  <link rel="stylesheet" href="settingsStyle.css">
+</head>
+<body>
+<div class="settings-page">
+  <!-- Sidebar -->
+  <aside class="settings-sidebar">
+    <header>
+      <h1>Settings</h1>
+    </header>
+    <nav class="settings-menu">
+      <ul>
+        <li><a href="#" data-section="account">Account</a></li>
+        <li><a href="#" data-section="notifications">Notifications</a></li>
+        <li><a href="#" data-section="theme">Theme</a></li>
+        <li><a href="#" data-section="logout">Log Out</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main>
+
+    <a href="index.html">
+      <button class="return-button">Return to Chat</button>
+    </a>
+
+    <section id="account" class="settings-content">
+      <h2>Account</h2>
+      <button id="change-username">Change Username</button>
+      <button id="authenticate">Authenticate</button>
+    </section>
+
+    <section id="notifications" class="settings-content hidden">
+      <h2>Notifications</h2>
+      <label>
+        <input type="checkbox" id="notifications-toggle">
+        Enable Notifications
+      </label>
+    </section>
+
+    <section id="theme" class="settings-content hidden">
+      <h2>Theme</h2>
+      <button id="toggle-theme">Switch to Dark Mode</button>
+    </section>
+
+    <section id="logout" class="settings-content hidden">
+      <h2>Log Out</h2>
+      <p>Are you sure you want to log out?</p>
+      <button id="log-out">Log Out</button>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <p>Doomsday Area Network</p>
+</footer>
+
+
+<script src="SettingsApp.js"></script>
+</body>
+</html>
+
