@@ -132,13 +132,13 @@ button:hover {
   color: #fafafa;
 }
 
-/* Footer Styling */
+/* Footer Style */
 footer {
   margin-top: auto;
-  text-align: center;  /* Center-align footer text */
-  padding: 1rem;        /* Add space inside the footer */
-  background: var(--bckgrndMenu);  /* Use background from the theme */
-  color: var(--txtColor);    /* Text color from the theme */
+  text-align: center;
+  padding: 1rem;
+  background: var(--bckgrndMenu);
+  color: var(--txtColor);
   position: relative;
   bottom: 0;
   width: 100%;
