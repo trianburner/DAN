@@ -8,13 +8,37 @@ const pinnedMessagesContainer = document.getElementById("pinned-messages");
 let ws;
 let username = "";
 
+// Add light mode class
+document.addEventListener('DOMContentLoaded', () => {
+  // Check if the user is already logged in by checking localStorage
+  username = localStorage.getItem('username');  // Get username from localStorage
+
+  // If the user is logged in, show the chat container directly
+  if (username) {
+    console.log('Welcome back, ' + username);
+    document.getElementById('chat-container').classList.remove('hidden');
+    loginScreen.classList.add('hidden');
+    connect();  // Connect WebSocket and initialize chat
+  } else {
+    // If no username, show the login screen
+    document.getElementById('chat-container').classList.add('hidden');
+    loginScreen.classList.remove('hidden');
+  }
+
+  // Dark mode button
+  const themeBtn = document.getElementById('toggle-theme');
+  themeBtn.textContent = 'Dark Mode';
+});
+
+// Set username from the input and log in
 function setUsername() {
   const newUsername = usernameInput.value.trim();
   if (newUsername) {
     username = newUsername;
+    localStorage.setItem('username', username);  // Store username in localStorage
     loginScreen.classList.add("hidden");
     chatContainer.classList.remove("hidden");
-    connect();
+    connect();  // Start the chat and WebSocket connection
   }
 }
 
@@ -32,10 +56,10 @@ function connect() {
     statusDiv.style.color = "green";
     // Send username to server
     ws.send(
-      JSON.stringify({
-        type: "join",
-        username: username,
-      })
+        JSON.stringify({
+          type: "join",
+          username: username,
+        })
     );
   };
 
@@ -74,15 +98,12 @@ function connect() {
       timestamp.className = "message-time";
       timestamp.textContent = `[${currentTime}]`;
 
-      //Format of Chat Message
-      //[10:56:03 PM] A: Some Text
       messageElement.appendChild(timestamp);
       messageElement.appendChild(document.createTextNode(" "));
       messageElement.appendChild(userSpan);
       messageElement.appendChild(document.createTextNode(message.text));
       messageElement.classList.add("chat-message");
 
-      //right clicking pins message
       messageElement.addEventListener("contextmenu", function (e) {
         e.preventDefault();
         pinMessage(message.username, message.text);
@@ -113,7 +134,8 @@ function connect() {
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
   };
 }
-//right clicking pinned message, unpins them
+
+// Right-clicking on pinned message to unpin them
 pinnedMessagesContainer.addEventListener("contextmenu", function (e) {
   e.preventDefault();
   const targetMessage = e.target;
@@ -128,12 +150,12 @@ function sendMessage() {
   if (text && ws.readyState === WebSocket.OPEN) {
     const currentTime = new Date().toLocaleTimeString();
     ws.send(
-      JSON.stringify({
-        type: "message",
-        text: text,
-        username: username,
-        timestamp: currentTime,
-      })
+        JSON.stringify({
+          type: "message",
+          text: text,
+          username: username,
+          timestamp: currentTime,
+        })
     );
     messageInput.value = "";
   }

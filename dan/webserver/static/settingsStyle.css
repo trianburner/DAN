@@ -1,0 +1,101 @@
+/* Page Layout */
+
+.settings-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+.settings-sidebar {
+  width: 250px;
+  background: var(--bckgrndMenu);
+  color: var(--txtColor);
+  padding: 1rem;
+}
+
+.settings-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.settings-menu li {
+  margin-bottom: 1rem;
+}
+
+.settings-menu a {
+  text-decoration: none;
+  color: var(--txtColor);
+  display: block;
+  padding: 0.5rem;
+  background: var(--bckgrndButton);
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover Effect for Settings Menu Links */
+.settings-menu a:hover {
+  background: var(--hvrButton);
+  color: var(--bckgrndColor);
+}
+
+/* Header Styling */
+.settings-content h2 {
+  background: var(--hdrColor);
+  color: var(--txtColor);
+  padding: 0.5rem;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
+}
+
+/* Main Content Area */
+main {
+  flex-grow: 1;
+  padding: 2rem;
+  background: var(--bckgrndColor);
+  color: var(--txtColor);
+}
+
+.settings-content {
+  display: none;
+}
+
+.settings-content:not(.hidden) {
+  display: block;
+}
+
+/* Button Styles */
+button {
+  background: var(--bckgrndButton);
+  color: var(--txtColor);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+  background: var(--hvrButton);
+  color: var(--bckgrndColor);
+}
+
+/* Footer Styling */
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bckgrndMenu);
+  color: var(--txtColor);
+}
+
+/* Theme Variables (Light Mode) */
+:root {
+  --bckgrndColor: #fafafa;
+  --txtColor: #4b4b4c;
+  --hdrColor: #e4e5f1;
+  --bckgrndMenu: #d2d3db;
+  --bckgrndButton: #e4e5f1;
+  --hvrButton: #9394a5;
+}
+
