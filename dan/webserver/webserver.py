@@ -122,7 +122,7 @@ async def chat(request, ws):
 # helper function for sending messages to all connected clients
 async def _send_to_all_clients(msg):
   json_msg = json.dumps(msg)
-  dan.send(json_msg.encode().encode("UTF-8"))
+  dan.send(json_msg.encode("utf-8"))
   for client in client_usernames:
     try:
       await client.send(json_msg)
