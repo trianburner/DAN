@@ -14,11 +14,7 @@ client_usernames = {}
 
 @app.route('/')
 def index(request):
-    return send_file('templates/index.html')
-
-@app.route('/settings')
-def settings(request):
-    return send_file('templates/settings.html')
+    return send_file('static/index.html')
 
 @app.route('/static/<path:path>')
 def static(request, path):

@@ -1,101 +1,68 @@
-
 body {
   max-width: 800px;
   margin: 0 auto;
   padding: 1rem;
   font-family: sans-serif;
-  background-color: #d2d3db;
-  color: #4b4b4c;
 }
-h1 {
-  color: #000000;
-  border: 1px  solid #4b4b4c;
-  background-color: rgba(77, 77, 83, 0.42);
-  padding: 1rem;
-  width: 200px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
-}
 #messages {
   height: 400px;
   overflow-y: auto;
   border: 1px solid #ccc;
   margin-bottom: 1rem;
-  background-color: #fafafa;
   padding: 1rem;
   width: 100%;
-  border-radius: 12px;
 }
 
 #message-input {
   width: 80%;
-  padding: 1.0rem;
-  border-radius: 4px;
+  padding: 0.5rem;
 }
 
+/**/
 #chat-panel {
   display: flex;
 }
-
 #message-panel {
   flex-grow: 1;
-
 }
 
 #user-list-container {
   display: flex;
-  margin-right: 30px;
   flex-direction: column;
   width: 200px;
   height: auto;
 }
-
 #user-list-header {
   font-size: 20px;
   margin-top: 0px;
   margin-bottom: 0px;
   margin-right: 20px;
 }
-
 #user-list {
   height: 90px;
   list-style: none;
-  width: 180px;
-  padding-left: 10px;
-  padding-top: 5px;
-  background-color: #fafafa;
-  border-radius: 8px;
+  padding-left: 0px;
 }
 
 #pinned-messages {
-  padding-left: 10px;
-  padding-top: 5px;
+  padding-left: 0px;
   border: 1px solid #ccc;
   height: 280px;
-  background-color: #fafafa;
   width: 180px;
-  border-radius: 10px;
 }
 
 #pinned-list-header {
   margin-bottom: 0px;
 }
-
-/* Button Style */
+/**/
 button {
-  padding: 1.1rem 1.3rem;
-  background: #4f6d75;
-  color: #fafafa;
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
 }
-
-button:hover {
-  background: #9394a5;
-}
-
 
 .login-screen {
   position: fixed;
@@ -131,39 +98,6 @@ button:hover {
   color: gray;
   margin-left: 5px;
 }
-
 .hidden {
   display: none;
 }
-
-/* Style for Settings Button*/
-.settings-button {
-  padding: 0.5rem 1rem;
-  background: #e4e5f1;
-  color: #4b4b4c;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  position: relative;
-  top: -12px;
-}
-
-.settings-button:hover {
-  background: #9394a5;
-  color: #fafafa;
-}
-
-/* Footer Style */
-footer {
-  margin-top: auto;
-  text-align: center;
-  padding: 1rem;
-  background: var(--bckgrndMenu);
-  color: var(--txtColor);
-  position: relative;
-  bottom: 0;
-  width: 100%;
-}
-
-
-
