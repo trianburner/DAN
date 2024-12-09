@@ -1,4 +1,4 @@
-from microdot import Microdot, Response, send_file
+from microdot.microdot import Microdot, Response, send_file
 from microdot.websocket import with_websocket
 import json
 import asyncio
@@ -14,15 +14,15 @@ client_usernames = {}
 
 @app.route('/')
 def index(request):
-    return send_file('templates/index.html')
+    return send_file('/webserver/templates/index.html')
 
 @app.route('/settings')
 def settings(request):
-    return send_file('templates/settings.html')
+    return send_file('/webserver/templates/settings.html')
 
 @app.route('/static/<path:path>')
 def static(request, path):
-    return send_file(f'static/{path}')
+    return send_file(f'/webserver/static/{path}')
 
 @app.route('/ws')
 @with_websocket
