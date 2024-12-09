@@ -64,13 +64,13 @@ class BroadcastPacket(DANPacket):
 
     def __init__(self, source: int, id: int, content: str):
         super().__init__()
-        self.type_bits = 0b00.to_bytes(1, self.ENDIANNESS)
+        self.type_bits = 0b00
         self.source = source
         self.id = id
         self.content = content
 
     def encode(self):
-        self.raw_msg = self.type_bits + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.id.to_bytes(self.IDBYTES, self.ENDIANNESS) + self.content.encode(self.STRENCODING)
         return self.raw_msg
         
@@ -105,14 +105,14 @@ class DMPacket(DANPacket):
 
     def __init__(self, source: int, dest: int, id: int, content: str):
         super().__init__()
-        self.type_bits = 0b01.to_bytes(1, self.ENDIANNESS)
+        self.type_bits = 0b01
         self.source = source
         self.id = id
         self.dest = dest
         self.content = content
 
     def encode(self):
-        self.raw_msg = self.type_bits + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.dest.to_bytes(self.DESTBYTES, self.ENDIANNESS) + self.id.to_bytes(self.IDBYTES, self.ENDIANNESS) + \
                        self.content.encode(self.STRENCODING)
         return self.raw_msg
@@ -156,7 +156,7 @@ class MultiPartPacket(DANPacket):
 
     def __init__(self, source: int, dest: int, id: int, seq: int, content: str):
         super().__init__()
-        self.type_bits = 0b10.to_bytes(1, self.ENDIANNESS)
+        self.type_bits = 0b10
         self.source = source
         self.id = id
         self.seq = seq
@@ -164,7 +164,7 @@ class MultiPartPacket(DANPacket):
         self.content = content
 
     def encode(self):
-        self.raw_msg = self.type_bits + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.dest.to_bytes(self.DESTBYTES, self.ENDIANNESS) + self.id.to_bytes(self.IDBYTES, self.ENDIANNESS) + \
                        self.seq.to_bytes(self.SEQBYTES, self.ENDIANNESS) + self.content.encode(self.STRENCODING)
         return self.raw_msg
@@ -210,12 +210,12 @@ class PingPacket(DANPacket):
 
     def __init__(self, source: int, id: int):
         super().__init__()
-        self.type_bits = 0b11.to_bytes(1, self.ENDIANNESS)
+        self.type_bits = 0b11
         self.source = source
         self.id = id
 
     def encode(self):
-        self.raw_msg = self.type_bits + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.id.to_bytes(self.IDBYTES, self.ENDIANNESS)
         return self.raw_msg
     
@@ -286,3 +286,4 @@ if __name__ == "__main__":
         b = DANPacket.decode(a.encode())
         assert(a == b)
     print("Ping Tests Passed")
+
