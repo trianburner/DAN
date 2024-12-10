@@ -70,7 +70,7 @@ class BroadcastPacket(DANPacket):
         self.content = content
 
     def encode(self):
-        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.INFOBYTES, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.id.to_bytes(self.IDBYTES, self.ENDIANNESS) + self.content.encode(self.STRENCODING)
         return self.raw_msg
         
@@ -109,7 +109,7 @@ class DMPacket(DANPacket):
         self.content = content
 
     def encode(self):
-        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.INFOBYTES, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.dest.to_bytes(self.DESTBYTES, self.ENDIANNESS) + self.id.to_bytes(self.IDBYTES, self.ENDIANNESS) + \
                        self.content.encode(self.STRENCODING)
         return self.raw_msg
@@ -153,7 +153,7 @@ class MultiPartPacket(DANPacket):
         self.content = content
 
     def encode(self):
-        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.INFOBYTES, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.dest.to_bytes(self.DESTBYTES, self.ENDIANNESS) + self.id.to_bytes(self.IDBYTES, self.ENDIANNESS) + \
                        self.seq.to_bytes(self.SEQBYTES, self.ENDIANNESS) + self.content.encode(self.STRENCODING)
         return self.raw_msg
@@ -194,7 +194,7 @@ class PingPacket(DANPacket):
         self.id = id
 
     def encode(self):
-        self.raw_msg = self.type_bits.to_bytes(self.TYPEBITS, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
+        self.raw_msg = self.type_bits.to_bytes(self.INFOBYTES, self.ENDIANNESS) + self.source.to_bytes(self.SOURCEBYTES, self.ENDIANNESS) + \
                        self.id.to_bytes(self.IDBYTES, self.ENDIANNESS)
         return self.raw_msg
     
