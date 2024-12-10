@@ -101,16 +101,14 @@ def send(content):
     global g_sx
     global g_packet
     global g_packet_count
-    if g_sx is None or g_packet is None or g_packet_count is None:
-        pass
     
     # TBI: Implement for other types of packet.
     # TBI: Chop content into multiple packets.
     
-    g_packet = BroadcastPacket(DAN_NODE_ID, 1, content).encode()
+    g_packet_count = (g_packet_count + 1) % DAN_NODE_PACKET_MAX_ID
+    
+    g_packet = BroadcastPacket(DAN_NODE_ID, g_packet_count, content).encode()
     print("Made packet >> ", g_packet)
     
     _sendPacket(g_sx, g_packet)
-    
-    g_packet_count = (g_packet_count + 1) % DAN_NODE_PACKET_MAX_ID
 
