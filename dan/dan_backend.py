@@ -51,10 +51,8 @@ def initialize_backend():
     g_message = None
 
     # LoRa
-    g_sx.begin(freq=923, bw=125.0, sf=12, cr=8, syncWord=0x12,
-            power=-5, currentLimit=60.0, preambleLength=8,
-            implicit=False, implicitLen=0xFF,
-            crcOn=True, txIq=False, rxIq=False,
+    g_sx.begin(freq=923, bw=125.0, sf=8, cr=5, syncWord=0x12, power=22, preambleLength=8,
+            implicit=False, implicitLen=0xFF, crcOn=True, txIq=False, rxIq=False,
             tcxoVoltage=1.7, useRegulatorLDO=False, blocking=True)
 
     g_sx.setBlockingCallback(False, callback)
