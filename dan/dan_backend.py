@@ -1,4 +1,5 @@
 from sx126x.sx1262 import SX1262
+from sx126x._sx126x import ERROR
 from DANPacket import *
 
 
@@ -67,9 +68,13 @@ def callback(events):
     
     if events & SX1262.RX_DONE:
         msg, err = g_sx.recv()
-        if err == 0:
+        if err != 0:
+            print("RECEIVE ERROR >> ", ERROR[err])
+        else:
             _onMessageReceived(g_sx, msg)
+            print("Packet received")
     elif events & SX1262.TX_DONE:
+        print("Packet sent")
         _onMessageSent(g_sx)
 
 
@@ -88,23 +93,26 @@ def _onMessageSent(sx):
 
 
 def _sendPacket(sx, packet):
-    sx.send(packet.encode())
+    packet_length, err = sx.send(packet)
+    
+    if err != 0:
+        print("SEND ERROR >> ", ERROR[err])
 
 
-def send(content: bytes):
+def send(content):
     global g_sx
     global g_packet
     global g_packet_count
     if g_sx is None or g_packet is None or g_packet_count is None:
-        return
+        pass
     
     # TBI: Implement for other types of packet.
     # TBI: Chop content into multiple packets.
     
-    if len(content) > DANPacket.MAXLENGTH:
-        return
+    g_packet = BroadcastPacket(DAN_NODE_ID, 1, content).encode()
+    print("Made packet >> ", g_packet)
     
-    g_packet = BroadcastPacket(DAN_NODE_ID, id, content)
     _sendPacket(g_sx, g_packet)
+    
     g_packet_count = (g_packet_count + 1) % DAN_NODE_PACKET_MAX_ID
 

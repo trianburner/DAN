@@ -36,7 +36,7 @@ class DANPacket:
     @classmethod
     def decode(cls, content: bytes):
         #try:
-        first_byte = int.from_bytes(content[0:1], cls.ENDIANNESS)
+        first_byte = int.from_bytes(content[0:1])
         # print(first_byte)
         #first_two_bits = (first_byte >> 6) & 0b11
         return TYPES[first_byte].decode(content)
@@ -77,12 +77,9 @@ class BroadcastPacket(DANPacket):
     @classmethod
     def decode(cls, content: bytes):
         source_start = cls.INFOBYTES
-        source = int.from_bytes(
-            content[source_start:source_start+cls.SOURCEBYTES], 
-            cls.ENDIANNESS, 
-            signed=False)
+        source = int.from_bytes(content[source_start:source_start+cls.SOURCEBYTES])
         id_start = cls.INFOBYTES + cls.SOURCEBYTES
-        id = int.from_bytes(content[id_start:id_start+cls.IDBYTES], cls.ENDIANNESS, signed=False)
+        id = int.from_bytes(content[id_start:id_start+cls.IDBYTES])
         content_start = cls.INFOBYTES + cls.SOURCEBYTES + cls.IDBYTES
         content = content[content_start:].decode(cls.STRENCODING)
         return BroadcastPacket(source, id, content)
@@ -120,21 +117,13 @@ class DMPacket(DANPacket):
     @classmethod
     def decode(cls, content: bytes):
         source_start = cls.INFOBYTES
-        source = int.from_bytes(
-            content[source_start:source_start+cls.SOURCEBYTES], 
-            cls.ENDIANNESS, 
-            signed=False)
+        source = int.from_bytes(content[source_start:source_start+cls.SOURCEBYTES])
         
         dest_start = source_start + cls.SOURCEBYTES
-        dest = int.from_bytes(
-            content[dest_start:dest_start+cls.DESTBYTES], 
-            cls.ENDIANNESS, 
-            signed=False)
+        dest = int.from_bytes(content[dest_start:dest_start+cls.DESTBYTES])
 
         id_start = dest_start + cls.DESTBYTES
-        id = int.from_bytes(
-            content[id_start:id_start+cls.IDBYTES], 
-            cls.ENDIANNESS, signed=False)
+        id = int.from_bytes(content[id_start:id_start+cls.IDBYTES])
         
         content_start = id_start + cls.IDBYTES
         content = content[content_start:].decode(cls.STRENCODING)
@@ -172,26 +161,16 @@ class MultiPartPacket(DANPacket):
     @classmethod
     def decode(cls, content: bytes):
         source_start = cls.INFOBYTES
-        source = int.from_bytes(
-            content[source_start:source_start+cls.SOURCEBYTES], 
-            cls.ENDIANNESS, 
-            signed=False)
+        source = int.from_bytes(content[source_start:source_start+cls.SOURCEBYTES])
         
         dest_start = source_start + cls.SOURCEBYTES
-        dest = int.from_bytes(
-            content[dest_start:dest_start+cls.DESTBYTES], 
-            cls.ENDIANNESS, 
-            signed=False)
+        dest = int.from_bytes(content[dest_start:dest_start+cls.DESTBYTES])
 
         id_start = dest_start + cls.DESTBYTES
-        id = int.from_bytes(
-            content[id_start:id_start+cls.IDBYTES], 
-            cls.ENDIANNESS, signed=False)
+        id = int.from_bytes(content[id_start:id_start+cls.IDBYTES])
         
         seq_start = id_start + cls.IDBYTES
-        seq = int.from_bytes(
-            content[seq_start:seq_start+cls.SEQBYTES], 
-            cls.ENDIANNESS, signed=False)
+        seq = int.from_bytes(content[seq_start:seq_start+cls.SEQBYTES])
         
         content_start = seq_start + cls.SEQBYTES
         content = content[content_start:].decode(cls.STRENCODING)
@@ -222,14 +201,10 @@ class PingPacket(DANPacket):
     @classmethod
     def decode(cls, content: bytes):
         source_start = cls.INFOBYTES
-        source = int.from_bytes(
-            content[source_start:source_start+cls.SOURCEBYTES], 
-            cls.ENDIANNESS, 
-            signed=False)
+        source = int.from_bytes(content[source_start:source_start+cls.SOURCEBYTES])
         
         id_start = cls.INFOBYTES + cls.SOURCEBYTES
-        id = int.from_bytes(content[id_start:id_start+cls.IDBYTES], 
-                            cls.ENDIANNESS, signed=False)
+        id = int.from_bytes(content[id_start:id_start+cls.IDBYTES])
 
         return PingPacket(source, id)
     
