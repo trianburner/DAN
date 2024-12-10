@@ -86,13 +86,14 @@ async def chat(request, ws):
                     await _send_to_all_clients(pinned_message)
             
             elif data['type'] == 'unpin_message':
-                remove_text = data['text']
+                remove_text_search = data['text'].split(":")[1].strip()
+                username = data['text'].split(":")[0]
                 try:
-                    pinned_messages.remove(remove_text)
+                    pinned_messages.remove(next(filter(lambda x: x['text'] == remove_text_search and x['username'] == username, pinned_messages)))
                     # create unpinned message object
                     unpin_message = {
                         'type': 'unpin_message',
-                        'text': remove_text
+                        'text': data['text']
                     }
                     #updates all users of what messages were pinned
                     await _send_to_all_clients(unpin_message)
