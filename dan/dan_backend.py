@@ -68,7 +68,7 @@ def callback(events):
         else:
             print("Packet received, msg: ", msg)
             packet = DANPacket.decode(msg)
-            asyncio.get_event_loop().create_task(g_callback(packet.content))
+            asyncio.get_event_loop().run_until_complete(g_callback(packet.content))
             
             # Re-transmit packet if not recently received
             if not g_packet_history.contains(packet):

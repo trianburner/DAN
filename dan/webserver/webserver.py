@@ -117,7 +117,7 @@ async def chat(request, ws):
             del client_usernames[ws]
         
         #updates all users of whose currently online after a user leaves
-        _send_user_list_to_all_clients()
+        await _send_user_list_to_all_clients()
         
 # helper function for sending messages to all local clients
 async def send_locally(msg):
