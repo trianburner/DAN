@@ -12,6 +12,24 @@ messages = []
 pinned_messages = []
 client_usernames = {}
 
+global dan_message_processor
+dan_message_processor = None
+dan_message_queue = asyncio.Queue()
+
+
+async def handle_dan_message(message):
+    """Handle messages received from DAN network"""
+    try:
+        # Add to queue for processing
+        await dan_message_queue.put(message)
+    except Exception as e:
+        print(f"Error handling DAN message: {e}")
+        if message:
+            print("Message: ", nmessage)
+
+def dan_message_callback(message):
+    asyncio.create_task(handle_dan_message(message))
+
 @app.route('/')
 def index(request):
     return send_file('/webserver/templates/index.html')
@@ -120,15 +138,19 @@ async def chat(request, ws):
         await _send_user_list_to_all_clients()
 
 # helper function for sending messages to all connected clients
-async def _send_to_all_clients(msg):
-  json_msg = json.dumps(msg)
-  dan.send(json_msg)
-  for client in client_usernames:
-    try:
-      await client.send(json_msg)
-    except Exception:
-      del client_usernames[client]
+async def _send_locally(msg):
+    for client in client_usernames:
+        try:
+            await client.send(msg)
+        except Exception:
+            del client_usernames[client]
 
+
+async def _send_to_all_clients(msg):
+    json_msg = json.dumps(msg)
+    await _send_locally(json_msg)
+    dan.send(json_msg)
+  
 #helper function for sending list of currently connected users
 async def _send_user_list_to_all_clients():
     user_list = list(client_usernames.values())
@@ -150,8 +172,22 @@ def __pinned_message_append(msg):
     if len(pinned_messages) > MAX_PINNED_MESSAGES:
         pinned_messages.pop(0)
 
+async def process_dan_messages():
+    while True:
+        try:
+            message = await dan_message_queue.get()
+            message = json.loads(message)
+            await _send_locally(message)
+        except Exception as e:
+            print(f"Error processing DAN message: {e}")
+            if (message):
+                print(message)
+
 def start_server():
     try:
+        global dan_message_processor
+        dan.set_message_callback(dan_message_callback)
+        dan_message_processor = asyncio.create_task(process_dan_messages())
         app.run(host='0.0.0.0', port=80)
     except Exception as e:
         print(f'Server error: {e}')

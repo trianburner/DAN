@@ -1,7 +1,7 @@
 from sx126x.sx1262 import SX1262
 from sx126x._sx126x import ERROR
 from DANPacket import *
-
+import time
 
 DAN_NODE_ID = 1
 DAN_NODE_PACKET_CB_MAX_LENGTH = 20
@@ -43,12 +43,16 @@ def initialize_backend():
     global g_packet
     global g_packet_count
     global g_message
+    global g_message_callback
+    global is_busy
     
     g_packet = None
     g_packet_count = 0
     g_packet_history = PacketCircularBuffer()
     g_sx = SX1262(spi_bus=1, clk=10, mosi=11, miso=12, cs=3, irq=20, rst=15, gpio=2)
     g_message = None
+    g_message_callback = None
+    is_busy = False
 
     # LoRa
     g_sx.begin(freq=923, bw=125.0, sf=8, cr=5, syncWord=0x12, power=22, preambleLength=8,
@@ -83,6 +87,9 @@ def _onMessageReceived(sx, msg, packet_history):
     g_message = packet.contents
     if not packet_history.contains(packet):
         _sendPacket(sx, packet)
+        # callback function for handling message
+        if g_message_callback:
+            g_message_callback(g_message)
 
 
 def _onMessageSent(sx):
@@ -98,10 +105,13 @@ def _sendPacket(sx, packet):
 
 
 def send(content):
+    global is_busy
     global g_sx
     global g_packet
     global g_packet_count
-    
+    while is_busy:
+        time.sleep_ms(5)
+    is_busy = True
     # TBI: Implement for other types of packet.
     # TBI: Chop content into multiple packets.
     
@@ -111,4 +121,9 @@ def send(content):
     print("Made packet >> ", g_packet)
     
     _sendPacket(g_sx, g_packet)
+    is_busy = False
 
+
+def set_message_callback(callback):
+    global g_message_callback
+    g_message_callback = callback
