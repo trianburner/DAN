@@ -12,34 +12,16 @@ messages = []
 pinned_messages = []
 client_usernames = {}
 
-global dan_message_processor
-dan_message_processor = None
-dan_message_queue = asyncio.Queue()
-
-
-async def handle_dan_message(message):
-    """Handle messages received from DAN network"""
-    try:
-        # Add to queue for processing
-        await dan_message_queue.put(message)
-    except Exception as e:
-        print(f"Error handling DAN message: {e}")
-        if message:
-            print("Message: ", nmessage)
-
-def dan_message_callback(message):
-    asyncio.create_task(handle_dan_message(message))
-
 @app.route('/')
-def index(request):
+async def index(request):
     return send_file('/webserver/templates/index.html')
 
 @app.route('/settings')
-def settings(request):
+async def settings(request):
     return send_file('/webserver/templates/settings.html')
 
 @app.route('/static/<path:path>')
-def static(request, path):
+async def static(request, path):
     return send_file(f'/webserver/static/{path}')
 
 @app.route('/ws')
@@ -135,23 +117,25 @@ async def chat(request, ws):
             del client_usernames[ws]
         
         #updates all users of whose currently online after a user leaves
-        await _send_user_list_to_all_clients()
-
-# helper function for sending messages to all connected clients
-async def _send_locally(msg):
+        _send_user_list_to_all_clients()
+        
+# helper function for sending messages to all local clients
+async def send_locally(msg):
+    print("In webserver, msg: ", msg)
     for client in client_usernames:
         try:
             await client.send(msg)
-        except Exception:
+        except Exception as e:
             del client_usernames[client]
+            print(e)
 
-
+# helper function for sending messages to all DAN clients
 async def _send_to_all_clients(msg):
-    json_msg = json.dumps(msg)
-    await _send_locally(json_msg)
-    dan.send(json_msg)
-  
-#helper function for sending list of currently connected users
+  msg = json.dumps(msg)
+  asyncio.get_event_loop().create_task(dan.send(msg))
+  await send_locally(msg)
+
+# helper function for sending list of currently connected users
 async def _send_user_list_to_all_clients():
     user_list = list(client_usernames.values())
 
@@ -172,22 +156,11 @@ def __pinned_message_append(msg):
     if len(pinned_messages) > MAX_PINNED_MESSAGES:
         pinned_messages.pop(0)
 
-async def process_dan_messages():
-    while True:
-        try:
-            message = await dan_message_queue.get()
-            message = json.loads(message)
-            await _send_locally(message)
-        except Exception as e:
-            print(f"Error processing DAN message: {e}")
-            if (message):
-                print(message)
-
 def start_server():
+    # Initialize LoRa backend and assign received message callback function
+    dan.initialize_backend(send_locally)
+    
     try:
-        global dan_message_processor
-        dan.set_message_callback(dan_message_callback)
-        dan_message_processor = asyncio.create_task(process_dan_messages())
         app.run(host='0.0.0.0', port=80)
     except Exception as e:
         print(f'Server error: {e}')

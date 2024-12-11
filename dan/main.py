@@ -1,8 +1,5 @@
 import network
 from webserver import webserver
-from dan_backend import initialize_backend
-
-initialize_backend()
 
 # TODO recall settings from file on boot
 
@@ -13,12 +10,10 @@ PASSWORD = "123456789"
 # Set country
 rp2.country('US')
 
-# Disable WiFi power-saving
-# ap.config(pm = 0xa11140)
-
 # Configure AP settings for softAP network
 ap = network.WLAN(network.AP_IF)
 ap.config(essid=SSID, password=PASSWORD)
+ap.config(pm = 0xa11140) # Disable WiFi power-saving
 ap.active(True)
 
 # Wait until the AP has started before continuing
@@ -32,8 +27,5 @@ print("--Access point active")
 print("--SSID: " + SSID)
 print(ap.ifconfig())
 
-
-
 # Start web server at port 80
-if __name__ == '__main__':
-    webserver.start_server()
+webserver.start_server()
