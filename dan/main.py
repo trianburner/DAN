@@ -1,8 +1,8 @@
 import network
 from webserver import webserver
-#from dan_backend import initialize_backend
+from dan_backend import initialize_backend
 
-#initialize_backend()
+initialize_backend()
 
 # TODO recall settings from file on boot
 

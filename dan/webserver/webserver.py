@@ -2,7 +2,7 @@ from microdot.microdot import Microdot, Response, send_file
 from microdot.websocket import with_websocket
 import json
 import asyncio
-
+import dan_backend as dan
 
 app = Microdot()
 MAX_PINNED_MESSAGES = 10
@@ -122,6 +122,7 @@ async def chat(request, ws):
 # helper function for sending messages to all connected clients
 async def _send_to_all_clients(msg):
   json_msg = json.dumps(msg)
+  dan.send(json_msg)
   for client in client_usernames:
     try:
       await client.send(json_msg)
